@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import '../design/colors.dart';
+import '../widgets/button_container.dart';
 
 class HomeAppBarTitle extends StatelessWidget {
-  const HomeAppBarTitle({super.key});
+  const HomeAppBarTitle({
+    super.key,
+    required this.userName,
+  });
 
+  final String userName;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -17,48 +22,41 @@ class HomeAppBarTitle extends StatelessWidget {
                   DecorationImage(image: AssetImage('assets/images/user.png')),
               borderRadius: BorderRadius.all(Radius.circular(12))),
         ),
+        Text(
+          userName,
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
         Expanded(
-          child: Text(
-            'Store Name',
-            style: Theme.of(context).textTheme.headlineLarge,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ButtonContainer(
+                iconButton: IconButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Notification button pressed! 😊')));
+                  },
+                  icon: const Icon(Icons.notifications,
+                      color: WeinFluColors.brandPrimaryColor),
+                ),
+                margin: const EdgeInsets.all(8),
+              ),
+              ButtonContainer(
+                iconButton: IconButton(
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: WeinFluColors.brandPrimaryColor,
+                  ),
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('More options button pressed! 😊'))),
+                ),
+                margin: const EdgeInsets.all(8),
+              )
+            ],
           ),
         ),
-        ContainerHeaderIcon(
-            configMargin: const EdgeInsets.only(right: 12),
-            iconButton: IconButton(
-                onPressed: () => print('presionarion icono notificiaciones'),
-                icon: const Icon(
-                  Icons.notifications,
-                  color: WeinFluColors.brandPrimaryColor,
-                ))),
-        ContainerHeaderIcon(
-            iconButton: IconButton(
-                onPressed: () => print('presionarion icono mas'),
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: WeinFluColors.brandPrimaryColor,
-                ))),
       ],
-    );
-  }
-}
-
-class ContainerHeaderIcon extends StatelessWidget {
-  final IconButton iconButton;
-  final EdgeInsets? configMargin;
-  const ContainerHeaderIcon(
-      {super.key, required this.iconButton, this.configMargin});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      width: 40,
-      margin: configMargin,
-      decoration: BoxDecoration(
-          border: Border.all(color: WeinFluColors.brandLightColor),
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
-      child: iconButton,
     );
   }
 }

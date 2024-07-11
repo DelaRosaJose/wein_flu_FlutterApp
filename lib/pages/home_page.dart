@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wein_flu/design/colors.dart';
+import 'package:wein_flu/design/radius.dart';
+import 'package:wein_flu/pages/home_app_bar_title.dart';
+import 'package:wein_flu/widgets/custom_money_display.dart';
+import 'package:wein_flu/widgets/summary_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -11,87 +15,106 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WeinFluColors.brandPrimaryColor,
       appBar: AppBar(
         toolbarHeight: 97,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(16),
+            bottomLeft: WeinFluRadius.small,
+            bottomRight: WeinFluRadius.small,
           ),
         ),
         backgroundColor: WeinFluColors.brandLightColor,
-        title: AppBarTitle(userName: userName),
+        title: HomeAppBarTitle(userName: userName),
       ),
-      body: const Center(
-        child: Text(
-          'Hola Weincoders 🚀!!!',
-        ),
-      ),
+      body: const TopHomePageBody(),
     );
   }
 }
 
-class AppBarTitle extends StatelessWidget {
-  const AppBarTitle({
+class TopHomePageBody extends StatelessWidget {
+  const TopHomePageBody({
     super.key,
-    required this.userName,
   });
-
-  final String userName;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          margin: const EdgeInsets.only(right: 12),
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/user.png')),
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-        ),
-        Text(
-          userName,
-          style: const TextStyle(color: WeinFluColors.brandPrimaryColor),
-        ),
-        const Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ButtonContainer(
-                icon: Icons.notifications,
-                margin: EdgeInsets.all(8),
-              ),
-              ButtonContainer(icon: Icons.more_vert)
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ButtonContainer extends StatelessWidget {
-  final IconData icon;
-  final EdgeInsetsGeometry? margin;
-
-  const ButtonContainer({super.key, required this.icon, this.margin});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: WeinFluColors.brandLightColorBorder),
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
-      width: 40,
-      height: 40,
-      margin: margin,
-      child: Icon(
-        icon,
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(16),
+      transform: Matrix4.translationValues(0, -12, 0),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: WeinFluRadius.xs,
+          bottomRight: WeinFluRadius.xs,
+        ),
         color: WeinFluColors.brandPrimaryColor,
+      ),
+      height: 389,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    margin: const EdgeInsets.only(top: 56),
+                    child: Text(
+                      'Your Budget',
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall!
+                          .copyWith(color: WeinFluColors.brandLightColor),
+                    )),
+                CustomMoneyDisplay(
+                  amount: 2868000.12,
+                  padding: const EdgeInsets.only(top: 8, right: 4),
+                  amountStyle: Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(color: WeinFluColors.brandLightColor),
+                  amountStyleSmall: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: WeinFluColors.brandLightColor),
+                ),
+              ],
+            ),
+          ),
+          SummaryCard(
+              typeofCard: TypeofCard.incomes,
+              amount: 700000,
+              period: 'From January 1 to January 31',
+              action: () => ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: WeinFluColors.brandOnSuccessColor,
+                      content: Text(
+                        '${TypeofCard.incomes.name} Action Pushed 😃',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: WeinFluColors.brandLightColor,
+                            ),
+                      ),
+                    ),
+                  )),
+          SummaryCard(
+            typeofCard: TypeofCard.speding,
+            amount: 90000,
+            period: 'From January 1 to January 31',
+            action: () => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: WeinFluColors.brandOnErrorColor,
+                content: Text(
+                  '${TypeofCard.speding.name} Action Pushed 🙃',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: WeinFluColors.brandLightColor,
+                      ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
