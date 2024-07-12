@@ -5,12 +5,37 @@ import 'package:wein_flu/pages/home_app_bar_title.dart';
 import 'package:wein_flu/widgets/custom_money_display.dart';
 import 'package:wein_flu/widgets/summary_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
   });
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final String userName = 'Store Name';
+  var buttonStyleInactive = ElevatedButton.styleFrom(
+      elevation: 0,
+      backgroundColor: WeinFluColors.brandLightColor,
+      shadowColor: WeinFluColors.brandLightColor);
+  var buttonStyleActive = ElevatedButton.styleFrom(
+      backgroundColor: WeinFluColors.brandSecondaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // <-- Radius
+      ));
+
+  late ButtonStyle categorieBtnStyle;
+  late ButtonStyle recentTransactionsBtnStyle;
+
+  @override
+  void initState() {
+    super.initState();
+
+    categorieBtnStyle = buttonStyleActive;
+    recentTransactionsBtnStyle = buttonStyleInactive;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +51,92 @@ class HomePage extends StatelessWidget {
         backgroundColor: WeinFluColors.brandLightColor,
         title: HomeAppBarTitle(userName: userName),
       ),
-      body: const TopHomePageBody(),
+      body: Column(
+        children: [
+          const TopHomePageBody(),
+          MidHomePageBody(
+            categorieBtnStyle: categorieBtnStyle,
+            recentTransactionsBtnStyle: recentTransactionsBtnStyle,
+            categoriesBtnAction: () {
+              setState(() {
+                // currentDetailWidget = const CategoriesWidget();
+                categorieBtnStyle = buttonStyleActive;
+                recentTransactionsBtnStyle = buttonStyleInactive;
+              });
+            },
+            recentBtnAction: () {
+              setState(() {
+                categorieBtnStyle = buttonStyleInactive;
+                recentTransactionsBtnStyle = buttonStyleActive;
+                // currentDetailWidget = const RecentTransactions();
+              });
+            },
+          ),
+        ],
+      ),
     );
+  }
+}
+
+class MidHomePageBody extends StatelessWidget {
+  final ButtonStyle categorieBtnStyle;
+  final ButtonStyle recentTransactionsBtnStyle;
+  final void Function()? categoriesBtnAction;
+  final void Function()? recentBtnAction;
+
+  const MidHomePageBody(
+      {super.key,
+      required this.categorieBtnStyle,
+      required this.recentTransactionsBtnStyle,
+      required this.categoriesBtnAction,
+      required this.recentBtnAction});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        height: 90,
+        transform: Matrix4.translationValues(0, -20, 0),
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: WeinFluColors.brandLightColor,
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16))),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: categorieBtnStyle,
+                onPressed: categoriesBtnAction,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Categories',
+                    style: TextStyle(
+                        color: WeinFluColors.brandDarkColor, fontSize: 14),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ElevatedButton(
+                style: recentTransactionsBtnStyle,
+                onPressed: recentBtnAction,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Recent transaction',
+                    style: TextStyle(
+                        color: WeinFluColors.brandLigthDarkColor, fontSize: 14),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }
 
