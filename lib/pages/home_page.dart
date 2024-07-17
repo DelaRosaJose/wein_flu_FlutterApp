@@ -5,6 +5,7 @@ import 'package:wein_flu/pages/home_app_bar_title.dart';
 import 'package:wein_flu/widgets/custom_money_display.dart';
 import 'package:wein_flu/widgets/product_detail_card.dart';
 import 'package:wein_flu/widgets/summary_card.dart';
+import 'package:wein_flu/widgets/transation_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -16,6 +17,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Widget currentDetailWidget = const CategoriesWidget();
+
   final String userName = 'Store Name';
   var buttonStyleInactive = ElevatedButton.styleFrom(
       elevation: 0,
@@ -61,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             recentTransactionsBtnStyle: recentTransactionsBtnStyle,
             categoriesBtnAction: () {
               setState(() {
-                // currentDetailWidget = const CategoriesWidget();
+                currentDetailWidget = const CategoriesWidget();
                 categorieBtnStyle = buttonStyleActive;
                 recentTransactionsBtnStyle = buttonStyleInactive;
               });
@@ -70,59 +73,11 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 categorieBtnStyle = buttonStyleInactive;
                 recentTransactionsBtnStyle = buttonStyleActive;
-                // currentDetailWidget = const RecentTransactions();
+                currentDetailWidget = const RecentTransactions();
               });
             },
           ),
-          CategoriesWidget()
-        ],
-      ),
-    );
-  }
-}
-
-class CategoriesWidget extends StatelessWidget {
-  const CategoriesWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        children: [
-          TextButton(
-            onPressed: () {},
-            style: const ButtonStyle(alignment: Alignment.topRight),
-            child: Text(
-              'View All',
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: WeinFluColors.brandPrimaryColor,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          const ProductDetailCard(
-            imageAsset: 'assets/images/pizza.png',
-            amount: 391254.01,
-            productName: 'Food & Drink',
-            currentSells: '2250',
-            percentage: '1.8',
-            typeProductDetailCard: TypeProductDetailCard.incomes,
-          ),
-          const ProductDetailCard(
-            typeProductDetailCard: TypeProductDetailCard.incomes,
-            imageAsset: 'assets/images/tv.png',
-            amount: 3176254.01,
-            productName: 'Electronics',
-            currentSells: '2250',
-            percentage: '43.6',
-          ),
-          const ProductDetailCard(
-            typeProductDetailCard: TypeProductDetailCard.outcomes,
-            imageAsset: 'assets/images/health.png',
-            amount: 38.01,
-            productName: 'Health',
-            currentSells: '110',
-            percentage: '25.8',
-          ),
+          Expanded(child: currentDetailWidget)
         ],
       ),
     );
@@ -277,5 +232,121 @@ class MidHomePageBody extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class CategoriesWidget extends StatelessWidget {
+  const CategoriesWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        TextButton(
+          onPressed: () {},
+          style: const ButtonStyle(alignment: Alignment.topRight),
+          child: Text(
+            'View All',
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: WeinFluColors.brandPrimaryColor,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        const ProductDetailCard(
+          imageAsset: 'assets/images/pizza.png',
+          amount: 391254.01,
+          productName: 'Food & Drink',
+          currentSells: '2250',
+          percentage: '1.8',
+          typeProductDetailCard: TypeProductDetailCard.incomes,
+        ),
+        const ProductDetailCard(
+          typeProductDetailCard: TypeProductDetailCard.incomes,
+          imageAsset: 'assets/images/tv.png',
+          amount: 3176254.01,
+          productName: 'Electronics',
+          currentSells: '2250',
+          percentage: '43.6',
+        ),
+        const ProductDetailCard(
+          typeProductDetailCard: TypeProductDetailCard.outcomes,
+          imageAsset: 'assets/images/health.png',
+          amount: 38.01,
+          productName: 'Health',
+          currentSells: '110',
+          percentage: '25.8',
+        ),
+        const SizedBox(
+          height: 14,
+        ),
+      ],
+    );
+  }
+}
+
+class RecentTransactions extends StatelessWidget {
+  const RecentTransactions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        TextButton(
+          onPressed: () {},
+          style: const ButtonStyle(alignment: Alignment.topRight),
+          child: Text(
+            'View All',
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: WeinFluColors.brandPrimaryColor,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        TransactionDetailByDay(
+          day: 'TUE',
+          isToday: true,
+          dayNumber: 4,
+          listofTransactions: [
+            TransactionDetail(
+                movementName: 'Movement Name',
+                transactionDate: 'Monday 3th,  September 2023',
+                typeTransaction: TypeTransaction.negative,
+                amount: 420.16),
+            TransactionDetail(
+                movementName: 'Movement Name',
+                transactionDate: 'Monday 3th,  September 2023',
+                typeTransaction: TypeTransaction.positive,
+                amount: 433.35)
+          ],
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        TransactionDetailByDay(
+          day: 'MON',
+          isToday: false,
+          dayNumber: 3,
+          listofTransactions: [
+            TransactionDetail(
+                movementName: 'Movement Name',
+                transactionDate: 'Monday 3th,  September 2023',
+                typeTransaction: TypeTransaction.positive,
+                amount: 720.92),
+            TransactionDetail(
+                movementName: 'Movement Name',
+                transactionDate: 'Monday 3th,  September 2023',
+                typeTransaction: TypeTransaction.negative,
+                amount: 84.45),
+            TransactionDetail(
+                movementName: 'Movement Name',
+                transactionDate: 'Monday 3th,  September 2023',
+                typeTransaction: TypeTransaction.positive,
+                amount: 137.26)
+          ],
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+      ],
+    );
   }
 }

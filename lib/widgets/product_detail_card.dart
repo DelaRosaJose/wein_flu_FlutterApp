@@ -58,7 +58,11 @@ class ProductDetailCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(imageAsset),
+          Image.asset(
+            imageAsset,
+            width: 40,
+            height: 40,
+          ),
           Expanded(
               child: Container(
             padding: const EdgeInsets.only(top: 13, left: 16),

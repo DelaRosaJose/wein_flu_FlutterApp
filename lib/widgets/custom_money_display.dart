@@ -3,16 +3,20 @@ import 'package:intl/intl.dart';
 
 class CustomMoneyDisplay extends StatelessWidget {
   final double amount;
-  final TextStyle amountStyle;
+  final TextStyle? amountStyle;
   final TextStyle amountStyleSmall;
   final EdgeInsets? padding;
-
-  const CustomMoneyDisplay(
-      {super.key,
-      required this.amount,
-      required this.amountStyle,
-      required this.amountStyleSmall,
-      this.padding});
+  final EdgeInsets? margin;
+  final Widget? leftSimbol;
+  const CustomMoneyDisplay({
+    super.key,
+    required this.amount,
+    required this.amountStyle,
+    required this.amountStyleSmall,
+    this.padding,
+    this.margin,
+    this.leftSimbol,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,23 +28,23 @@ class CustomMoneyDisplay extends StatelessWidget {
 
     final String convertedMoneyToString = formater.format(amount);
     final splitConvertedValues = convertedMoneyToString.split(',');
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: padding!,
-          child: Text(
-            '\$',
-            style: amountStyleSmall,
+    return Container(
+      margin: margin,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: padding,
+            child: leftSimbol ?? Text('\$', style: amountStyleSmall),
           ),
-        ),
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(text: splitConvertedValues[0], style: amountStyle),
-          TextSpan(text: ',${splitConvertedValues[1]}', style: amountStyleSmall)
-        ])),
-      ],
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(text: splitConvertedValues[0], style: amountStyle),
+            TextSpan(
+                text: ',${splitConvertedValues[1]}', style: amountStyleSmall)
+          ])),
+        ],
+      ),
     );
   }
 }
