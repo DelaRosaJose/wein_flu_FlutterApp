@@ -3,6 +3,7 @@ import 'package:wein_flu/design/colors.dart';
 import 'package:wein_flu/design/radius.dart';
 import 'package:wein_flu/pages/home_app_bar_title.dart';
 import 'package:wein_flu/widgets/custom_money_display.dart';
+import 'package:wein_flu/widgets/product_detail_card.dart';
 import 'package:wein_flu/widgets/summary_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,8 +41,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: WeinFluColors.brandSecondaryColor,
       appBar: AppBar(
-        toolbarHeight: 97,
+        toolbarHeight: 60,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: WeinFluRadius.small,
@@ -72,71 +74,58 @@ class _HomePageState extends State<HomePage> {
               });
             },
           ),
+          CategoriesWidget()
         ],
       ),
     );
   }
 }
 
-class MidHomePageBody extends StatelessWidget {
-  final ButtonStyle categorieBtnStyle;
-  final ButtonStyle recentTransactionsBtnStyle;
-  final void Function()? categoriesBtnAction;
-  final void Function()? recentBtnAction;
-
-  const MidHomePageBody(
-      {super.key,
-      required this.categorieBtnStyle,
-      required this.recentTransactionsBtnStyle,
-      required this.categoriesBtnAction,
-      required this.recentBtnAction});
+class CategoriesWidget extends StatelessWidget {
+  const CategoriesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        height: 90,
-        transform: Matrix4.translationValues(0, -20, 0),
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: WeinFluColors.brandLightColor,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16))),
-        child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                style: categorieBtnStyle,
-                onPressed: categoriesBtnAction,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    'Categories',
-                    style: TextStyle(
-                        color: WeinFluColors.brandDarkColor, fontSize: 14),
-                  ),
-                ),
-              ),
+    return Expanded(
+      child: ListView(
+        children: [
+          TextButton(
+            onPressed: () {},
+            style: const ButtonStyle(alignment: Alignment.topRight),
+            child: Text(
+              'View All',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: WeinFluColors.brandPrimaryColor,
+                  fontWeight: FontWeight.bold),
             ),
-            Expanded(
-              child: ElevatedButton(
-                style: recentTransactionsBtnStyle,
-                onPressed: recentBtnAction,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    'Recent transaction',
-                    style: TextStyle(
-                        color: WeinFluColors.brandLigthDarkColor, fontSize: 14),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ));
+          ),
+          const ProductDetailCard(
+            imageAsset: 'assets/images/pizza.png',
+            amount: 391254.01,
+            productName: 'Food & Drink',
+            currentSells: '2250',
+            percentage: '1.8',
+            typeProductDetailCard: TypeProductDetailCard.incomes,
+          ),
+          const ProductDetailCard(
+            typeProductDetailCard: TypeProductDetailCard.incomes,
+            imageAsset: 'assets/images/tv.png',
+            amount: 3176254.01,
+            productName: 'Electronics',
+            currentSells: '2250',
+            percentage: '43.6',
+          ),
+          const ProductDetailCard(
+            typeProductDetailCard: TypeProductDetailCard.outcomes,
+            imageAsset: 'assets/images/health.png',
+            amount: 38.01,
+            productName: 'Health',
+            currentSells: '110',
+            percentage: '25.8',
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -226,5 +215,67 @@ class TopHomePageBody extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class MidHomePageBody extends StatelessWidget {
+  final ButtonStyle categorieBtnStyle;
+  final ButtonStyle recentTransactionsBtnStyle;
+  final void Function()? categoriesBtnAction;
+  final void Function()? recentBtnAction;
+
+  const MidHomePageBody(
+      {super.key,
+      required this.categorieBtnStyle,
+      required this.recentTransactionsBtnStyle,
+      required this.categoriesBtnAction,
+      required this.recentBtnAction});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        transform: Matrix4.translationValues(0, -6, 0),
+        height: 90,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16))),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: categorieBtnStyle,
+                onPressed: categoriesBtnAction,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Categories',
+                    style: TextStyle(
+                        color: WeinFluColors.brandDarkColor, fontSize: 14),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ElevatedButton(
+                style: recentTransactionsBtnStyle,
+                onPressed: recentBtnAction,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Recent transaction',
+                    style: TextStyle(
+                        color: WeinFluColors.brandLigthDarkColor, fontSize: 14),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }
