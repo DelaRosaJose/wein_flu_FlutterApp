@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wein_flu/config/app_routes.dart';
 import 'package:wein_flu/design/colors.dart';
 import 'package:wein_flu/design/radius.dart';
 import 'package:wein_flu/pages/home_app_bar_title.dart';
+import 'package:wein_flu/pages/new_page.dart';
 import 'package:wein_flu/widgets/custom_money_display.dart';
 import 'package:wein_flu/widgets/product_detail_card.dart';
 import 'package:wein_flu/widgets/summary_card.dart';
@@ -243,7 +245,9 @@ class CategoriesWidget extends StatelessWidget {
     return ListView(
       children: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(AppRoutes.newPage);
+          },
           style: const ButtonStyle(alignment: Alignment.topRight),
           child: Text(
             'View All',
